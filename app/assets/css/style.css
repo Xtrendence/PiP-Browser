@@ -2,7 +2,7 @@ html {
 	font-family:"Helvetica Neue", "Lucida Grande", "Arial", "Verdana", "Tahoma", sans-serif;
 }
 body {
-	background:rgb(20,20,20);
+	background:rgb(0,0,0);
 	margin:0;
 	padding:0;
 	font-size:0;
@@ -46,6 +46,68 @@ div, span, input, button {
 	background:none;
 }
 
+#button-show-menu {
+	position:absolute;
+	z-index:2;
+	pointer-events:all;
+	top:30px;
+	left:30px;
+	padding:0;
+	width:30px;
+	height:30px;
+	transition:transform 0.25s;
+	border-radius:50%;
+	background:rgb(20,20,20);
+	cursor:pointer;
+}
+#button-show-menu svg {
+	fill:rgb(255,255,255);
+	width:20px;
+	height:20px;
+	padding:0 5px 0 5px;
+	margin-top:4px;
+}
+#button-show-menu:hover {
+	transform:scale(0.9);
+}
+
+.menu {
+	position:absolute;
+	z-index:3;
+	pointer-events:all;
+	top:20px;
+	left:20px;
+	padding:10px;
+	border-radius:30px;
+	background:rgb(20,20,20);
+}
+.menu button {
+	background:rgb(0,125,255);
+	height:30px;
+	font-weight:bold;
+	color:rgb(255,255,255);
+	padding:0 10px 0 10px;
+	border-radius:20px;
+	margin-right:10px;
+	vertical-align:top;
+	cursor:pointer;
+}
+.menu button:last-of-type {
+	margin-right:0;
+}
+.menu button.icon {
+	padding:0;
+}
+.menu button svg {
+	width:20px;
+	height:20px;
+	padding:0 5px 0 5px;
+	fill:rgb(255,255,255);
+}
+.menu button:hover {
+	background:rgb(0,150,255);
+}
+
 iframe {
 	position:absolute;
 	border:none;
@@ -54,4 +116,5 @@ iframe {
 	height:100%;
 	top:0;
 	left:0;
+	z-index:1;
 }
