@@ -8,7 +8,7 @@
 		"start": "electron app/server.js",
 		"dev": "nodemon --exec electron app/server.js",
 		"pack": "electron-builder --dir",
-		"dist": "electron-builder"
+		"dist": "electron-builder -mwl"
 	},
 	"repository": {
 		"type": "git",
