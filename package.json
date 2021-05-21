@@ -8,7 +8,8 @@
 		"start": "electron app/server.js",
 		"dev": "nodemon --exec electron app/server.js",
 		"pack": "electron-builder --dir",
-		"dist": "electron-builder -mwl"
+		"dist-mac": "electron-builder -mwl",
+		"dist-win": "electron-builder"
 	},
 	"repository": {
 		"type": "git",
@@ -32,6 +33,7 @@
 	},
 	"build": {
 		"appId": "com.xtrendence.pip-browser",
+		"productName": "PiP Browser",
 		"asar": true,
 		"mac": {
 			"category": "public.app-category.utilities"
