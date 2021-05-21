@@ -14,7 +14,6 @@ localExpress.listen(localPort, "localhost");
 const store = new Store();
 
 app.requestSingleInstanceLock();
-app.disableHardwareAcceleration();
 
 app.on("ready", () => {
 	let windowWidth = 595;
@@ -50,7 +49,11 @@ app.on("ready", () => {
 	});
 
 	ipcMain.handle("get-url", () => {
-		
+		localWindow.webContents.send("set-url", store.get("url"));
+	});
+
+	ipcMain.on("set-url", (event, url) => {
+		store.set("url", url);
 	});
 
 	ipcMain.handle("toggle-always-on-top", () => {

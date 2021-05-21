@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	let buttonAlwaysOnTop = document.getElementById("button-always-on-top");
 	let buttonQuit = document.getElementById("button-quit");
 
+	getURL();
+
 	buttonShowMenu.addEventListener("click", () => {
 		toggleMenu();
 	});
@@ -34,6 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	buttonSetURL.addEventListener("click", () => {
 		let url = document.getElementById("input-url").value;
 		loadURL(url);
+
+		if(!empty(url)) {
+			ipcRenderer.send("set-url", url);
+		}
 	});
 
 	buttonAlwaysOnTop.addEventListener("click", () => {
@@ -44,13 +50,17 @@ document.addEventListener("DOMContentLoaded", () => {
 		ipcRenderer.invoke("quit");
 	});
 
-	ipcRenderer.invoke("get-url").then((url) => {
-		loadURL(url);
-	});
-
 	ipcRenderer.on("toggle-menu", () => {
 		toggleMenu();
 	});
+
+	ipcRenderer.on("set-url", (event, url) => {
+		loadURL(url);
+	});
+
+	function getURL() {
+		ipcRenderer.invoke("get-url");
+	}
 
 	function loadURL(url) {
 		if(!empty(url)) {
@@ -66,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			frame.frameBorder = "0";
 
 			body.appendChild(frame);
+			document.getElementById("input-url").value = url;
 		}
 	}
 
