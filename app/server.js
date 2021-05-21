@@ -54,6 +54,8 @@ app.on("ready", () => {
 	});
 
 	ipcMain.handle("get-url", () => {
+		empty(store.get("url")) ?? store.set("url", "");
+		empty(store.get("background")) ?? store.set("background", true);
 		localWindow.webContents.send("set-url", { url:store.get("url"), background:store.get("background") });
 	});
 
