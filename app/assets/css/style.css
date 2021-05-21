@@ -134,6 +134,7 @@ div, span, input, button {
 }
 .settings .section {
 	display:block;
+	margin-top:20px;
 }
 .settings input {
 	width:200px;
@@ -145,6 +146,9 @@ div, span, input, button {
 	color:rgb(255,255,255);
 	background:rgb(60,60,60);
 	vertical-align:top;
+}
+.settings input.small {
+	width:100px;
 }
 .settings button {
 	border-radius:10px;
@@ -162,7 +166,6 @@ div, span, input, button {
 	background:rgb(0,150,255);
 }
 #button-close-settings {
-	margin-bottom:20px;
 	width:80px;
 }
 

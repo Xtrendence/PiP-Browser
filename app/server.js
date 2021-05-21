@@ -16,18 +16,22 @@ const store = new Store();
 app.requestSingleInstanceLock();
 
 app.on("ready", () => {
-	let windowWidth = 595;
-	let windowHeight = 335;
+	const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+	let screenWidth = width;
+	let screenHeight = height;
+
+	let windowWidth = empty(store.get("width")) ? 595 : store.get("width");
+	let windowHeight = empty(store.get("height")) ? 335 : store.get("height");
 
 	const localWindow = new BrowserWindow({
 		width: windowWidth,
 		height: windowHeight,
-		resizable: true,
+		resizable: false,
 		frame: false,
 		transparent: false,
 		alwaysOnTop: false,
-		x: 1920 - windowWidth - 20,
-		y: 1080 - windowHeight - 20 - 40,
+		x: screenWidth - windowWidth - 20,
+		y: screenHeight - windowHeight - 20,
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false
@@ -61,6 +65,23 @@ app.on("ready", () => {
 		store.set("background", args.background);
 	});
 
+	ipcMain.on("set-screen", (event, args) => {
+		windowWidth = args.width;
+		windowHeight = args.height;
+
+		localWindow.resizable = true;
+
+		localWindow.setSize(windowWidth, windowHeight);
+		localWindow.setPosition(screenWidth - windowWidth - 20, screenHeight - windowHeight - 20);
+
+		localWindow.webContents.send("set-screen", { width:windowWidth, height:windowHeight });
+
+		store.set("width", windowWidth);
+		store.set("height", windowHeight);
+
+		localWindow.resizable = false;
+	});
+
 	ipcMain.handle("toggle-always-on-top", () => {
 		localWindow.isAlwaysOnTop() ? localWindow.setAlwaysOnTop(false) : localWindow.setAlwaysOnTop(true);
 	});
@@ -69,3 +90,13 @@ app.on("ready", () => {
 		app.quit();
 	});
 });
+
+function empty(value) {
+	if(typeof value === "object" && value !== null && Object.keys(value.length === 0)) {
+		return true;
+	}
+	if(value === null || typeof value === "undefined" || value.toString().trim() === "") {
+		return true;
+	}
+	return false;
+}

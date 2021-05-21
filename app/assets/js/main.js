@@ -8,10 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	let buttonShowMenu = document.getElementById("button-show-menu");
 	let buttonHideMenu = document.getElementById("button-hide-menu");
+	let buttonDrag = document.getElementById("button-drag");
 	let buttonSettings = document.getElementById("button-settings");
 	let buttonCloseSettings = document.getElementById("button-close-settings");
 	let buttonSetURL = document.getElementById("button-set-url");
 	let buttonSetBackground = document.getElementById("button-set-background");
+	let buttonSetSize = document.getElementById("button-set-size");
+	let buttonResetSize = document.getElementById("button-reset-size");
 	let buttonAlwaysOnTop = document.getElementById("button-always-on-top");
 	let buttonQuit = document.getElementById("button-quit");
 
@@ -27,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 	buttonSettings.addEventListener("click", () => {
-		toggleMenu();
 		toggleSettings();
 	});
 
@@ -53,6 +55,23 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	});
 
+	buttonSetSize.addEventListener("click", () => {
+		try {
+			let width = parseInt(document.getElementById("input-width").value);
+			let height = parseInt(document.getElementById("input-height").value);
+
+			if(!empty(width) && !empty(height) && !isNaN(width) && !isNaN(height)) {
+				ipcRenderer.send("set-screen", { width:width, height:height });
+			}
+		} catch(e) {
+			console.trace(e);
+		}
+	});
+
+	buttonResetSize.addEventListener("click", () => {
+		ipcRenderer.send("set-screen", { width:595, height:335 });
+	});
+
 	buttonAlwaysOnTop.addEventListener("click", () => {
 		ipcRenderer.invoke("toggle-always-on-top");
 	});
@@ -75,6 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
 			frame.width = screen.width + "px";
 			frame.height = screen.height + "px";
 		}
+
+		document.getElementById("input-width").value = screen.width;
+		document.getElementById("input-height").value = screen.height;
 	});
 
 	function getURL() {
@@ -102,6 +124,9 @@ document.addEventListener("DOMContentLoaded", () => {
 				image.src = url;
 				image.id = "background";
 				image.classList.add("background");
+				image.addEventListener("error", () => {
+					image.remove();
+				});
 
 				body.appendChild(image);
 			} else {
@@ -128,8 +153,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	function toggleSettings() {
 		if(settings.classList.contains("hidden")) {
+			buttonDrag.classList.remove("draggable");
 			settings.classList.remove("hidden");
 		} else {
+			buttonDrag.classList.add("draggable");
 			settings.classList.add("hidden");
 		}
 	}
