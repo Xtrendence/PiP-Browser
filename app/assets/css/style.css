@@ -1,3 +1,7 @@
+:root {
+	--shadow-smooth:0 1px 1px rgba(0,0,0,0.08), 0 2px 2px rgba(0,0,0,0.05), 0 4px 4px rgba(0,0,0,0.06), 0 8px 8px rgba(0,0,0,0.1);
+}
+
 html {
 	font-family:"Helvetica Neue", "Lucida Grande", "Arial", "Verdana", "Tahoma", sans-serif;
 }
@@ -59,13 +63,19 @@ div, span, input, button {
 	border-radius:50%;
 	background:rgb(20,20,20);
 	cursor:pointer;
+	border-style:solid;
+	border-color:rgb(0,125,255);
+	border-width:2px;
+	box-shadow:var(--shadow-smooth);
 }
 #button-show-menu svg {
 	fill:rgb(255,255,255);
 	width:20px;
 	height:20px;
 	padding:0 5px 0 5px;
-	margin-top:4px;
+	top:4px;
+	left:-1px;
+	position:absolute;
 }
 #button-show-menu:hover {
 	transform:scale(0.9);
@@ -106,6 +116,51 @@ div, span, input, button {
 }
 .menu button:hover {
 	background:rgb(0,150,255);
+}
+
+.settings {
+	position:absolute;
+	top:20px;
+	left:20px;
+	width:calc(100% - 40px - 40px);
+	padding:20px;
+	background:rgb(20,20,20);
+	border-radius:20px;
+	z-index:4;
+}
+.settings .section {
+	display:block;
+}
+.settings input {
+	width:calc(70% - 40px);
+	margin-right:20px;
+	padding:0 10px 0 10px;
+	height:30px;
+	border-radius:10px;
+	display:inline-block;
+	color:rgb(255,255,255);
+	background:rgb(60,60,60);
+	vertical-align:top;
+}
+.settings button {
+	border-radius:10px;
+	padding:0 10px 0 10px;
+	height:30px;
+	width:30%;
+	max-width:100px;
+	display:inline-block;
+	vertical-align:top;
+	font-weight:bold;
+	cursor:pointer;
+	background:rgb(0,125,255);
+	color:rgb(255,255,255);
+}
+.settings button:hover {
+	background:rgb(0,150,255);
+}
+#button-close-settings {
+	margin-bottom:20px;
+	width:80px;
 }
 
 iframe {

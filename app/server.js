@@ -14,6 +14,7 @@ localExpress.listen(localPort, "localhost");
 const store = new Store();
 
 app.requestSingleInstanceLock();
+app.disableHardwareAcceleration();
 
 app.on("ready", () => {
 	let windowWidth = 595;

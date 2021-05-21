@@ -4,11 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	let body = document.body;
 	let menu = document.getElementById("menu");
-	let view = document.getElementById("view");
+	let settings = document.getElementById("settings");
 
 	let buttonShowMenu = document.getElementById("button-show-menu");
 	let buttonHideMenu = document.getElementById("button-hide-menu");
 	let buttonSettings = document.getElementById("button-settings");
+	let buttonCloseSettings = document.getElementById("button-close-settings");
+	let buttonSetURL = document.getElementById("button-set-url");
 	let buttonAlwaysOnTop = document.getElementById("button-always-on-top");
 	let buttonQuit = document.getElementById("button-quit");
 
@@ -21,7 +23,17 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 	buttonSettings.addEventListener("click", () => {
+		toggleMenu();
+		toggleSettings();
+	});
 
+	buttonCloseSettings.addEventListener("click", () => {
+		toggleSettings();
+	});
+
+	buttonSetURL.addEventListener("click", () => {
+		let url = document.getElementById("input-url").value;
+		loadURL(url);
 	});
 
 	buttonAlwaysOnTop.addEventListener("click", () => {
@@ -33,20 +45,43 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 	ipcRenderer.invoke("get-url").then((url) => {
-		if(!empty(url)) {
-			view.src = url;
-		}
+		loadURL(url);
 	});
 
 	ipcRenderer.on("toggle-menu", () => {
 		toggleMenu();
 	});
 
+	function loadURL(url) {
+		if(!empty(url)) {
+			let frames = document.getElementsByTagName("iframe");
+			for(let i = 0; i < frames.length; i++) {
+				frames[i].remove();
+			}
+
+			let frame = document.createElement("iframe");
+			frame.src = url;
+			frame.id = "view";
+			frame.scrolling = "no";
+			frame.frameBorder = "0";
+
+			body.appendChild(frame);
+		}
+	}
+
 	function toggleMenu() {
 		if(menu.classList.contains("hidden")) {
 			menu.classList.remove("hidden");
 		} else {
 			menu.classList.add("hidden");
+		}
+	}
+
+	function toggleSettings() {
+		if(settings.classList.contains("hidden")) {
+			settings.classList.remove("hidden");
+		} else {
+			settings.classList.add("hidden");
 		}
 	}
 
