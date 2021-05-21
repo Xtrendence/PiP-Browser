@@ -11,10 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	let buttonSettings = document.getElementById("button-settings");
 	let buttonCloseSettings = document.getElementById("button-close-settings");
 	let buttonSetURL = document.getElementById("button-set-url");
+	let buttonSetBackground = document.getElementById("button-set-background");
 	let buttonAlwaysOnTop = document.getElementById("button-always-on-top");
 	let buttonQuit = document.getElementById("button-quit");
 
 	getURL();
+	getScreen();
 
 	buttonShowMenu.addEventListener("click", () => {
 		toggleMenu();
@@ -35,10 +37,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	buttonSetURL.addEventListener("click", () => {
 		let url = document.getElementById("input-url").value;
-		loadURL(url);
+		loadURL(url, false);
 
 		if(!empty(url)) {
-			ipcRenderer.send("set-url", url);
+			ipcRenderer.send("set-url", { url:url, background:false });
+		}
+	});
+
+	buttonSetBackground.addEventListener("click", () => {
+		let url = document.getElementById("input-url").value;
+		loadURL(url, true);
+
+		if(!empty(url)) {
+			ipcRenderer.send("set-url", { url:url, background:true });
 		}
 	});
 
@@ -54,28 +65,55 @@ document.addEventListener("DOMContentLoaded", () => {
 		toggleMenu();
 	});
 
-	ipcRenderer.on("set-url", (event, url) => {
-		loadURL(url);
+	ipcRenderer.on("set-url", (event, response) => {
+		loadURL(response.url, response.background);
+	});
+
+	ipcRenderer.on("set-screen", (event, screen) => {
+		let frame = document.getElementsByTagName("iframe")[0];
+		if(!empty(frame)) {
+			frame.width = screen.width + "px";
+			frame.height = screen.height + "px";
+		}
 	});
 
 	function getURL() {
 		ipcRenderer.invoke("get-url");
 	}
 
-	function loadURL(url) {
+	function getScreen() {
+		ipcRenderer.invoke("get-screen");
+	}
+
+	function loadURL(url, background) {
 		if(!empty(url)) {
 			let frames = document.getElementsByTagName("iframe");
 			for(let i = 0; i < frames.length; i++) {
 				frames[i].remove();
 			}
 
-			let frame = document.createElement("iframe");
-			frame.src = url;
-			frame.id = "view";
-			frame.scrolling = "no";
-			frame.frameBorder = "0";
+			let images = document.getElementsByClassName("background");
+			for(let i = 0; i < images.length; i++) {
+				images[i].remove();
+			}
 
-			body.appendChild(frame);
+			if(background) {
+				let image = document.createElement("img");
+				image.src = url;
+				image.id = "background";
+				image.classList.add("background");
+
+				body.appendChild(image);
+			} else {
+				let frame = document.createElement("iframe");
+				frame.src = url;
+				frame.id = "view";
+				frame.scrolling = "no";
+				frame.frameBorder = "0";
+
+				body.appendChild(frame);
+			}
+			
 			document.getElementById("input-url").value = url;
 		}
 	}

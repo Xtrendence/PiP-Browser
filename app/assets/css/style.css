@@ -136,7 +136,7 @@ div, span, input, button {
 	display:block;
 }
 .settings input {
-	width:calc(70% - 40px);
+	width:200px;
 	margin-right:20px;
 	padding:0 10px 0 10px;
 	height:30px;
@@ -150,14 +150,13 @@ div, span, input, button {
 	border-radius:10px;
 	padding:0 10px 0 10px;
 	height:30px;
-	width:30%;
-	max-width:100px;
 	display:inline-block;
 	vertical-align:top;
 	font-weight:bold;
 	cursor:pointer;
 	background:rgb(0,125,255);
 	color:rgb(255,255,255);
+	margin-right:20px;
 }
 .settings button:hover {
 	background:rgb(0,150,255);
@@ -176,4 +175,9 @@ iframe {
 	top:0;
 	left:0;
 	z-index:1;
+}
+
+.background {
+	position:absolute;
+	width:100%;
 }

@@ -49,11 +49,16 @@ app.on("ready", () => {
 	});
 
 	ipcMain.handle("get-url", () => {
-		localWindow.webContents.send("set-url", store.get("url"));
+		localWindow.webContents.send("set-url", { url:store.get("url"), background:store.get("background") });
 	});
 
-	ipcMain.on("set-url", (event, url) => {
-		store.set("url", url);
+	ipcMain.handle("get-screen", () => {
+		localWindow.webContents.send("set-screen", { width:windowWidth, height:windowHeight });
+	});
+
+	ipcMain.on("set-url", (event, args) => {
+		store.set("url", args.url);
+		store.set("background", args.background);
 	});
 
 	ipcMain.handle("toggle-always-on-top", () => {
