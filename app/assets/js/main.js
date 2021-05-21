@@ -41,18 +41,14 @@ document.addEventListener("DOMContentLoaded", () => {
 		let url = document.getElementById("input-url").value;
 		loadURL(url, false);
 
-		if(!empty(url)) {
-			ipcRenderer.send("set-url", { url:url, background:false });
-		}
+		ipcRenderer.send("set-url", { url:url, background:false });
 	});
 
 	buttonSetBackground.addEventListener("click", () => {
 		let url = document.getElementById("input-url").value;
 		loadURL(url, true);
 
-		if(!empty(url)) {
-			ipcRenderer.send("set-url", { url:url, background:true });
-		}
+		ipcRenderer.send("set-url", { url:url, background:true });
 	});
 
 	buttonSetSize.addEventListener("click", () => {
@@ -108,39 +104,37 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	function loadURL(url, background) {
-		if(!empty(url)) {
-			let frames = document.getElementsByTagName("iframe");
-			for(let i = 0; i < frames.length; i++) {
-				frames[i].remove();
-			}
-
-			let images = document.getElementsByClassName("background");
-			for(let i = 0; i < images.length; i++) {
-				images[i].remove();
-			}
-
-			if(background) {
-				let image = document.createElement("img");
-				image.src = url;
-				image.id = "background";
-				image.classList.add("background");
-				image.addEventListener("error", () => {
-					image.remove();
-				});
-
-				body.appendChild(image);
-			} else {
-				let frame = document.createElement("iframe");
-				frame.src = url;
-				frame.id = "view";
-				frame.scrolling = "no";
-				frame.frameBorder = "0";
-
-				body.appendChild(frame);
-			}
-			
-			document.getElementById("input-url").value = url;
+		let frames = document.getElementsByTagName("iframe");
+		for(let i = 0; i < frames.length; i++) {
+			frames[i].remove();
 		}
+
+		let images = document.getElementsByClassName("background");
+		for(let i = 0; i < images.length; i++) {
+			images[i].remove();
+		}
+
+		if(background) {
+			let image = document.createElement("img");
+			image.src = url;
+			image.id = "background";
+			image.classList.add("background");
+			image.addEventListener("error", () => {
+				image.remove();
+			});
+
+			body.appendChild(image);
+		} else {
+			let frame = document.createElement("iframe");
+			frame.src = url;
+			frame.id = "view";
+			frame.scrolling = "no";
+			frame.frameBorder = "0";
+
+			body.appendChild(frame);
+		}
+		
+		document.getElementById("input-url").value = url;
 	}
 
 	function toggleMenu() {
