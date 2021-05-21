@@ -13,6 +13,7 @@ localExpress.listen(localPort, "localhost");
 
 const store = new Store();
 
+app.name = "PiP Browser";
 app.requestSingleInstanceLock();
 
 app.on("ready", () => {
